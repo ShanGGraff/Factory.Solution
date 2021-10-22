@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
-namespace ToDoList.Models
+namespace Factory.Models
 {
-  public class Category
+  public class Engineer
     {
-        public Category()
+        public Engineer()
         {
             this.JoinEntities = new HashSet<License>();
         }
