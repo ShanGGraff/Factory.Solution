@@ -9,8 +9,8 @@ namespace Factory.Models
             this.JoinEntities = new HashSet<License>();
         }
 
-        public int CategoryId { get; set; }
-        public string Name { get; set; }
+        public int EngineerId { get; set; }
+        public string EngineerName { get; set; }
         public virtual ICollection<License> JoinEntities { get; set; }
     }
 }
