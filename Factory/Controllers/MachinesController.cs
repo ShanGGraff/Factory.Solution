@@ -67,8 +67,13 @@ namespace Factory.Controllers
     }
 
     [HttpPost]
-    public ActionResult AddEngineer(Machine machine, int MachineId)
+    public ActionResult AddEngineer(Machine machine, int EngineerId)
     {
+      if (EngineerId != 0)
+      {
+      _db.License.Add(new License() { EngineerId = EngineerId, MachineId = machine.MachineId });
+      }
+
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
