@@ -98,5 +98,12 @@ namespace Factory.Controllers
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
+    public ActionResult DeleteMachine(int joinId)
+    {
+      License joinEntry = _db.License.FirstOrDefault(entry => entry.LicenseId == joinId);
+      _db.License.Remove(joinEntry);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
   }
 }
