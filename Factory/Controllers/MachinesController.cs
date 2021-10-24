@@ -54,6 +54,10 @@ namespace Factory.Controllers
     [HttpPost]
     public ActionResult Edit(Machine machine, int EngineerId)
     {
+      if (EngineerId != 0)
+      {
+        _db.License.Add(new License() { EngineerId = EngineerId, MachineId = machine.MachineId });
+      }
       _db.Entry(machine).State = EntityState.Modified;
       _db.SaveChanges();
       return RedirectToAction("Index");
@@ -78,6 +82,25 @@ namespace Factory.Controllers
       return RedirectToAction("Index");
     }
 
+    // public ActionResult RemoveEngineer(int id)
+    // {
+    //   Machine thisMachine = _db.Machines.FirstOrDefault(machine => machine.MachineId == id);
+    //   ViewBag.EngineerId = new SelectList(_db.Engineers, "EngineerId", "EngineerName");
+    //   return View(thisMachine);
+    // }
+
+    // [HttpPost]
+    // public ActionResult RemoveEngineer(Machine machine, int EngineerId)
+    // {
+    //   if (EngineerId != 0)
+    //   {
+    //   _db.License.Remove({ EngineerId = EngineerId, MachineId = machine.MachineId });
+    //   }
+
+    //   _db.SaveChanges();
+    //   return RedirectToAction("Index");
+    // }
+
     public ActionResult Delete(int id)
     {
       Machine thisMachine = _db.Machines.FirstOrDefault(machine => machine.MachineId == id);
@@ -89,6 +112,14 @@ namespace Factory.Controllers
     {
       Machine thisMachine = _db.Machines.FirstOrDefault(machine => machine.MachineId == id);
       _db.Machines.Remove(thisMachine);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
+
+    public ActionResult DeleteEngineer(int joinId)
+    {
+      License joinEntry = _db.License.FirstOrDefault(entry => entry.LicenseId == joinId);
+      _db.License.Remove(joinEntry);
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
