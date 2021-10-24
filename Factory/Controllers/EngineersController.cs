@@ -23,21 +23,28 @@ namespace Factory.Controllers
 
     public ActionResult Create()
     {
-      ViewBag.MachineId = new SelectList(_db.Machines, "MachineId", "MachineName");
       return View();
     }
 
     [HttpPost]
     public ActionResult Create(Engineer engineer, int MachineId)
     {
+      bool isUnique = true;
+      List<Engineer> engineerList = _db.Engineers.ToList();
+      foreach(Engineer iteration in engineerList)
+      {
+        if (engineer.EngineerName == iteration.EngineerName)
+        {
+        isUnique = false;
+        ModelState.AddModelError("DuplicateName", engineer.EngineerName + " Is already hired");
+        return View();
+        }
+      }
+      if (isUnique)
+      {
       _db.Engineers.Add(engineer);
       _db.SaveChanges();
-
-      if (MachineId != 0)
-      {
-        _db.License.Add(new License() { MachineId = MachineId, EngineerId = engineer.EngineerId });
       }
-      _db.SaveChanges();
       return RedirectToAction("Index");
     }
 
@@ -53,18 +60,31 @@ namespace Factory.Controllers
     public ActionResult Edit(int id)
     {
       Engineer thisEngineer = _db.Engineers.FirstOrDefault(engineer => engineer.EngineerId == id);
-      ViewBag.MachineId = new SelectList(_db.Machines, "MachineId", "MachineName");
       return View(thisEngineer);
     }
 
     [HttpPost]
     public ActionResult Edit(Engineer engineer, int MachineId)
     {
-      _db.Entry(engineer).State = EntityState.Modified;
-      _db.SaveChanges();
+      bool isUnique = true;
+      List<Engineer> engineerList = _db.Engineers.ToList();
+      foreach(Engineer iteration in engineerList)
+      {
+        if (engineer.EngineerName == iteration.EngineerName)
+        {
+          isUnique = false;
+          ModelState.AddModelError("DuplicateName", engineer.EngineerName + " already exits");
+          return View();
+        }
+      }
+        if (isUnique)
+        {
+          _db.Entry(engineer).State = EntityState.Modified;
+          _db.SaveChanges();
+        }
+      
       return RedirectToAction("Index");
-    }
-
+      }
     public ActionResult AddMachine(int id)
     {
       Engineer thisEngineer = _db.Engineers.FirstOrDefault(engineer => engineer.EngineerId == id);

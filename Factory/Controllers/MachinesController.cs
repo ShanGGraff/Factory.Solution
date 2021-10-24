@@ -23,15 +23,28 @@ namespace Factory.Controllers
 
     public ActionResult Create()
     {
-      ViewBag.EngineerId = new SelectList(_db.Engineers, "EngineerId", "EngineerName");
       return View();
     }
 
     [HttpPost]
-    public ActionResult Create(Machine machine, int MachineId)
+    public ActionResult Create(Machine machine, int EngineerId)
     {
+      bool isUnique = true;
+      List<Machine> machineList = _db.Machines.ToList();
+      foreach(Machine iteration in machineList)
+      {
+        if (machine.MachineName == iteration.MachineName)
+        {
+        isUnique = false;
+        ModelState.AddModelError("DuplicateName", machine.MachineName + " Is already taken");
+        return View();
+        }
+      }
+      if (isUnique)
+      {
       _db.Machines.Add(machine);
       _db.SaveChanges();
+      }
       return RedirectToAction("Index");
     }
 
@@ -81,25 +94,6 @@ namespace Factory.Controllers
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
-
-    // public ActionResult RemoveEngineer(int id)
-    // {
-    //   Machine thisMachine = _db.Machines.FirstOrDefault(machine => machine.MachineId == id);
-    //   ViewBag.EngineerId = new SelectList(_db.Engineers, "EngineerId", "EngineerName");
-    //   return View(thisMachine);
-    // }
-
-    // [HttpPost]
-    // public ActionResult RemoveEngineer(Machine machine, int EngineerId)
-    // {
-    //   if (EngineerId != 0)
-    //   {
-    //   _db.License.Remove({ EngineerId = EngineerId, MachineId = machine.MachineId });
-    //   }
-
-    //   _db.SaveChanges();
-    //   return RedirectToAction("Index");
-    // }
 
     public ActionResult Delete(int id)
     {
