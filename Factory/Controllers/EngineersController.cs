@@ -66,25 +66,11 @@ namespace Factory.Controllers
     [HttpPost]
     public ActionResult Edit(Engineer engineer, int MachineId)
     {
-      bool isUnique = true;
-      List<Engineer> engineerList = _db.Engineers.ToList();
-      foreach(Engineer iteration in engineerList)
-      {
-        if (engineer.EngineerName == iteration.EngineerName)
-        {
-          isUnique = false;
-          ModelState.AddModelError("DuplicateName", engineer.EngineerName + " already exits");
-          return View();
-        }
-      }
-        if (isUnique)
-        {
-          _db.Entry(engineer).State = EntityState.Modified;
-          _db.SaveChanges();
-        }
-      
+
+      _db.Entry(engineer).State = EntityState.Modified;
+      _db.SaveChanges();
       return RedirectToAction("Index");
-      }
+    }
     public ActionResult AddMachine(int id)
     {
       Engineer thisEngineer = _db.Engineers.FirstOrDefault(engineer => engineer.EngineerId == id);
