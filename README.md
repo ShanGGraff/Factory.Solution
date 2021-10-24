@@ -56,7 +56,7 @@ The application tracks Engineers working for a factory and the Machines that eac
 14. If everything builds correctly, run ```dotnet run``` on the command line to start the web server
 
 ## Known Bugs <a id="bugs"></a>
-
+* Need to add code to make sure you can't add duplicate engineers and duplicate machines, or duplicate machine names or engineer names when editing either one.
 
 ## License
 * [MIT](https://choosealicense.com/licenses/mit/)
